@@ -22,7 +22,7 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 # ISO-639 code
 # for example: de, fr, ja, ko, zh-hans
-LANGUAGE_CODE = 'EN'
+LANGUAGE_CODE = 'en'
 
 ROOMS = [
     dict(

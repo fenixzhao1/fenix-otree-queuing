@@ -10,8 +10,8 @@ import csv
 import random
 import math
 import otree.common
-from profanity_filter import ProfanityFilter
-pf = ProfanityFilter()
+#from profanity_filter import ProfanityFilter
+#pf = ProfanityFilter()
 
 
 doc = """
@@ -65,7 +65,7 @@ class Subsession(BaseSubsession):
                 pass
             else:
                 self.session.vars['payment_round1'] = rnd
-        
+
         while self.session.vars['payment_round2'] == 0:
             rnd = random.randint(1, self.num_rounds())
             if parse_config(self.session.config['config_file'])[rnd-1]['practice'] or rnd == self.session.vars['payment_round1']:
@@ -111,15 +111,15 @@ class Subsession(BaseSubsession):
                 print(players[i].tokens)
             print("Tokens----------")
 
-    
+
     def set_initial_decisions(self):
         for player in self.get_players():
             player._initial_decision = 0
-    
+
     def set_payoffs(self):
         for g in self.get_groups():
             g.set_payoffs()
-                
+
     @property
     def config(self):
         try:
@@ -131,13 +131,13 @@ class Group(RedwoodGroup):
 
     def period_length(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['duration']
-    
+
     def swap_method(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['swap_method']
 
     def value(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['value']
-    
+
     def value_list(self):
         valueList = [int(i) for i in parse_config(self.session.config['config_file'])[self.round_number-1]['value'].strip('][').split(',')]
         print("valueList: ",valueList)
@@ -145,13 +145,13 @@ class Group(RedwoodGroup):
 
     def endowment(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['endowment']
-    
+
     def messaging(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['messaging']
 
     def practice(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['practice']
-    
+
     # returns a list of the queue where index is position and value is player id
     def queue_list(self):
         ppg = parse_config(self.session.config['config_file'])[self.round_number-1]['players_per_group']
@@ -174,12 +174,13 @@ class Group(RedwoodGroup):
         event.value['channel'] = 'outgoing'
         if type == 'request':
             if 'message' in event.value:
-                pf.censor(event.value['message'])
-                event.value['message'] = pf.censor(event.value['message'])
+                #pf.censor(event.value['message'])
+                #event.value['message'] = pf.censor(event.value['message'])
+                event.value['message'] = event.value['message']
         # broadcast the updated data out to all subjects
         self.send('swap', event.value)
         self.save()
-    
+
     def _on_report_event(self, event=None, **kwargs):
         print(event.value['message'])
         self.save()
@@ -202,7 +203,7 @@ class Player(BasePlayer):
 
     def final_position(self):
         return self._final_position
-    
+
     def initial_decision(self):
         return self._initial_decision
 
@@ -213,9 +214,9 @@ class Player(BasePlayer):
     def set_payoff(self,events):
         final_position = self._initial_position
         payoff = self.group.endowment()
-        
+
         for event in events:
-            
+
             if event.value['type'] == 'accept' and event.value['channel'] == 'incoming':
                 amount = event.value['offer']
                 if self.group.swap_method() == 'Double' and event.value['transfer'] == 0:
@@ -246,6 +247,6 @@ class Player(BasePlayer):
         #practice round does not count
         if self.group.practice():
             self.participant.payoff -= self.payoff
-        
+
         if self.round_number == self.subsession.num_rounds():
             self.final_payoff = self.in_round(self.session.vars['payment_round1']).payoff + self.in_round(self.session.vars['payment_round2']).payoff
