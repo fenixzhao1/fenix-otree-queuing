@@ -24,11 +24,23 @@ SESSION_CONFIG_DEFAULTS = dict(
 # for example: de, fr, ja, ko, zh-hans
 LANGUAGE_CODE = 'EN'
 
+ROOMS = [
+    dict(
+        name='session_room',
+        display_name='Session Room',
+        participant_label_file='_rooms/participant_label.txt',
+        # use_secure_urls=True
+    ),
+]
+
 # e.g. EUR, GBP, CNY, JPY
 REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
 POINTS_DECIMAL_PLACES = 1
 
+ADMIN_USERNAME = 'admin'
+# for security, best to set admin password in an environment variable
+ADMIN_PASSWORD = 'admin'
 
 DEMO_PAGE_INTRO_HTML = """ """
 # STATIC_ROOT = '__static_root'
