@@ -1,0 +1,33 @@
+{% extends "otree_redwood/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+Tu decisión
+{% endblock %}
+
+{% block scripts %}
+    <script type="module" src="{% static 'queuing_experiment/leeps-queue/leeps-queue.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    {% with config=subsession.config %}
+        <leeps-queue
+            initial-position='{{ player.initial_position }}'
+            initial-decision='{{ player.initial_decision }}'
+            period-length='{{ config.duration }}'
+            num-players='{{ player.num_players }}'
+            swap-method='{{ config.swap_method }}'
+            round-number='{{ subsession.round_number }}'
+            endowment='{{ config.endowment }}'
+            tokens='{{ player.tokens }}'
+            queue-list='{{player.group.queue_list}}'
+            value-list='{{player.group.value_list}}'
+            {% if config.messaging %}
+            messaging
+            {% endif %}
+        ></leeps-queue>
+    {% endwith %}
+
+    {% include Constants.contact_template %}
+    
+{% endblock %}
