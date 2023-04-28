@@ -5,8 +5,8 @@ from functools import reduce
 from .models import parse_config
 
 import math
-from profanity_filter import ProfanityFilter
-pf = ProfanityFilter()
+#from profanity_filter import ProfanityFilter
+#pf = ProfanityFilter()
 
 def get_config_columns(group):
     config = parse_config(group.session.config['config_file'])[group.round_number - 1]
@@ -67,7 +67,7 @@ def get_output_table_header(groups):
         'request_id',
         'report'
     ]
-    
+
     return header
 
 
@@ -88,7 +88,7 @@ def get_output_game(events):
     config_columns = get_config_columns(group)
 
     values = [int(i) for i in parse_config(group.session.config['config_file'])[group.round_number-1]['value'].strip('][').split(',')]
-    
+
     tick = 0
 
     request_ids = {}
@@ -158,7 +158,7 @@ def get_output_game(events):
                 positions[receiver],
                 event.value['offer'],
                 event.value['currentTokens'],
-                
+
             ]
             if event.value['type'] == 'request':
                 row += [
@@ -168,7 +168,7 @@ def get_output_game(events):
                 row += [
                     'N/A'
                 ]
-            
+
             if event.value['type'] == 'request':
                 if sender in request_ids.keys():
                     row += [
@@ -178,15 +178,15 @@ def get_output_game(events):
                     row += [
                         "null"
                     ]
-                if pf.censor(event.value['message'].strip()) in reported_messages:
-                    print("Connected: ", event.value['message'])
-                    row += [
-                        1
-                    ]
-                else:
-                    row += [
-                        0
-                    ]
+                # if pf.censor(event.value['message'].strip()) in reported_messages:
+                #     print("Connected: ", event.value['message'])
+                #     row += [
+                #         1
+                #     ]
+                # else:
+                #     row += [
+                #         0
+                #     ]
             elif event.value['type'] == 'accept':
                 if receiver in request_ids.keys():
                     row += [
